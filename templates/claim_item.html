@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}Claim Found Item #{{ item.id }} - LostLink{% endblock %}
+
+{% block content %}
+<div class="form-card">
+    <div style="margin-bottom: 2rem; text-align: center;">
+        <div style="display: inline-block; font-family: var(--font-mono); font-size: 0.8rem; color: var(--cyber-cyan); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.08em;">
+            // SECURE CLAIM VERIFICATION
+        </div>
+        <h1 style="font-size: 2.2rem; font-weight: 800; color: #ffffff;">
+            Claim Item: {{ item.title }}
+        </h1>
+        <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 0.35rem;">
+            Provide verifiable ownership details. Your answers are submitted directly to the finder and campus security for verification.
+        </p>
+    </div>
+
+    <!-- Found Item Summary Card -->
+    <div style="background: rgba(11, 15, 30, 0.7); border: 1px solid var(--border-hairline); border-radius: var(--radius-lg); padding: 1.25rem; display: flex; gap: 1rem; align-items: center; margin-bottom: 2rem;">
+        {% if item.image_path %}
+            <img src="{{ url_for('uploaded_file', filename=item.image_path) }}" alt="{{ item.title }}" 
+                 style="width: 68px; height: 68px; border-radius: var(--radius-md); object-fit: cover; border: 1px solid var(--border-hairline);">
+        {% else %}
+            <img src="{{ url_for('static', filename='images/default-item.svg') }}" alt="No photo" 
+                 style="width: 68px; height: 68px; border-radius: var(--radius-md); object-fit: cover; border: 1px solid var(--border-hairline);">
+        {% endif %}
+        <div>
+            <span class="badge badge-found" style="margin-bottom: 0.25rem;">Found Item #{{ item.id }}</span>
+            <div style="font-size: 1.05rem; font-weight: 700; color: #ffffff;">{{ item.title }}</div>
+            <div style="font-size: 0.82rem; color: var(--text-muted);">📍 Recovered at: {{ item.location }}</div>
+        </div>
+    </div>
+
+    <form method="POST" action="{{ url_for('claim_item', item_id=item.id) }}">
+        <!-- Claimant Name -->
+        <div class="form-group">
+            <label class="form-label" for="name">Your Full Name *</label>
+            <input type="text" id="name" name="name" class="form-control" 
+                   value="{% if current_user %}{{ current_user.name }}{% endif %}" required maxlength="100" placeholder="e.g. Alex Rivera">
+        </div>
+
+        <!-- Claimant Contact -->
+        <div class="form-group">
+            <label class="form-label" for="contact">Your Contact (Phone or Student Email) *</label>
+            <input type="text" id="contact" name="contact" class="form-control" 
+                   value="{% if current_user %}{{ current_user.email }}{% endif %}" required maxlength="150" placeholder="+91 98765 43210 or your student email">
+        </div>
+
+        <!-- Ownership Proof Questions per PDF Spec #24 -->
+        <div class="form-group">
+            <label class="form-label" for="proof">
+                Proof of Ownership &amp; Identifying Details *
+            </label>
+            <small style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 0.45rem; display: block;">
+                Please describe: 1) Specific color shade / brand, 2) Unique scratches, stickers, or serial numbers, 3) Contents inside (if a bag/wallet), or device pairing name.
+            </small>
+            <textarea id="proof" name="proof" class="form-control" rows="5" required 
+                      placeholder="e.g. The earphones case has a small blue sticker on the back and is paired with a device named 'Alex-Buds'. Left earbud has minor scratch..."></textarea>
+        </div>
+
+        <!-- Security Notice -->
+        <div style="background: rgba(0, 242, 254, 0.05); border: 1px solid rgba(0, 242, 254, 0.2); border-radius: var(--radius-md); padding: 0.85rem 1rem; margin-bottom: 1.75rem; font-size: 0.82rem; color: var(--text-secondary);">
+            🔒 <strong>Verification Policy:</strong> Submitting false ownership claims violates campus student conduct policies. All submissions are timestamped and logged.
+        </div>
+
+        <!-- Actions -->
+        <div style="display: flex; gap: 1rem;">
+            <button type="submit" class="btn btn-primary" style="flex: 1; padding: 0.85rem;">
+                Submit Ownership Claim ↗
+            </button>
+            <a href="{{ url_for('item_details', item_id=item.id) }}" class="btn btn-secondary">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

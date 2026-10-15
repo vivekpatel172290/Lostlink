@@ -1,0 +1,1706 @@
+/* ==========================================================================
+   LOSTLINK - CODER ARMY OFFICIAL CYBER UI/UX DESIGN SYSTEM
+   Electric Blue Glowing Effects, Radiant Border Links, Rotating Conic Borders,
+   Deep Coder Army Navy Blue Canvas (#020617), Glassmorphism, and Fluid Micro-Animations
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800;900&family=Rubik:wght@400;500;600;700&display=swap');
+
+:root {
+    /* Coder Army Official Black Canvas & Radiant Gradient Blue Design System */
+    --surface-bg: #030712; /* Deep Obsidian Pitch Black Canvas */
+    --surface-card: #080C16; /* Sleek Pitch Black Card Surface with Navy Undertone */
+    --surface-elevated: #0F172A; /* Elevated Surface */
+    --surface-glass: rgba(8, 12, 22, 0.9); /* Deep Obsidian Glassmorphism */
+    --surface-hover: rgba(17, 24, 39, 0.9);
+
+    /* Coder Army Signature Electric Blue & Cyan Palette */
+    --brand-blue: #3B82F6; /* Electric Blue (Tailwind Blue-500) */
+    --brand-blue-deep: #2563EB; /* Coder Army Official Theme Color (#2563EB, Tailwind Blue-600) */
+    --brand-blue-dark: #1D4ED8; /* Deep Cobalt Blue (Tailwind Blue-700) */
+    --brand-cyan: #00F0FF; /* High-voltage Electric Cyan */
+    --brand-sky: #60A5FA;
+    --brand-indigo: #6366F1;
+    --brand-purple: #8B5CF6;
+
+    /* Signature Electric Blue Glow Effects */
+    --glow-blue-sm: 0 0 14px rgba(59, 130, 246, 0.5);
+    --glow-blue-md: 0 0 28px rgba(59, 130, 246, 0.7), 0 0 55px rgba(0, 240, 255, 0.3);
+    --glow-blue-lg: 0 0 42px rgba(59, 130, 246, 0.85), 0 0 85px rgba(0, 240, 255, 0.45);
+    --glow-blue-inset: inset 0 0 15px rgba(59, 130, 246, 0.25);
+
+    /* Radiant Hairline & Border Link Tokens */
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-blue-subtle: rgba(59, 130, 246, 0.32);
+    --border-blue-active: rgba(59, 130, 246, 0.75);
+    --border-blue-bright: #3B82F6;
+    --border-link: 1px solid rgba(59, 130, 246, 0.45);
+
+    /* Signature Coder Army Blue Gradients */
+    --gradient-brand: linear-gradient(135deg, #1D4ED8 0%, #2563EB 35%, #3B82F6 70%, #00F0FF 100%);
+    --gradient-purple: linear-gradient(135deg, #6366F1 0%, #8B5CF6 50%, #0EA5E9 100%);
+    --gradient-text: linear-gradient(135deg, #FFFFFF 15%, #93C5FD 45%, #3B82F6 75%, #00F0FF 100%);
+    --gradient-glow: linear-gradient(135deg, rgba(37, 99, 235, 0.35), rgba(0, 240, 255, 0.18));
+
+    /* Semantic Status Colors with Radiant Glows */
+    --lost-red: #EF4444;
+    --lost-red-bg: rgba(239, 68, 68, 0.12);
+    --lost-red-glow: 0 0 20px rgba(239, 68, 68, 0.5), inset 0 0 10px rgba(239, 68, 68, 0.2);
+
+    --found-green: #10B981;
+    --found-green-bg: rgba(16, 185, 129, 0.12);
+    --found-green-glow: 0 0 20px rgba(16, 185, 129, 0.5), inset 0 0 10px rgba(16, 185, 129, 0.2);
+
+    --matched-purple: #A855F7;
+    --matched-purple-bg: rgba(168, 85, 247, 0.15);
+    --matched-purple-glow: 0 0 20px rgba(168, 85, 247, 0.5);
+
+    --resolved-cyan: #06B6D4;
+    --resolved-cyan-bg: rgba(6, 182, 212, 0.15);
+    --resolved-cyan-glow: 0 0 20px rgba(6, 182, 212, 0.5);
+
+    /* Typography */
+    --font-heading: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-sans: 'Poppins', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Rubik', monospace;
+
+    /* Text Colors */
+    --text-primary: #F8FAFC;
+    --text-secondary: #94A3B8;
+    --text-muted: #64748B;
+    --text-dim: #475569;
+
+    /* Corner Radii */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 18px;
+    --radius-xl: 24px;
+    --radius-pill: 9999px;
+}
+
+/* ==========================================================================
+   Base Styles & Reset
+   ========================================================================== */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+    background-color: var(--surface-bg);
+}
+
+body {
+    background-color: var(--surface-bg);
+    background-image: 
+        radial-gradient(ellipse 85% 55% at 50% -12%, rgba(37, 99, 235, 0.38) 0%, rgba(59, 130, 246, 0.16) 42%, rgba(3, 7, 18, 0) 80%),
+        radial-gradient(circle at 95% 45%, rgba(29, 78, 216, 0.16) 0%, transparent 45%),
+        radial-gradient(circle at 5% 75%, rgba(0, 240, 255, 0.12) 0%, transparent 45%),
+        radial-gradient(circle at 50% 100%, rgba(37, 99, 235, 0.14) 0%, transparent 50%);
+    background-attachment: fixed;
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    position: relative;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Subtle Technical Circuit Grid Overlay */
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: 
+        linear-gradient(to right, rgba(59, 130, 246, 0.035) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(59, 130, 246, 0.035) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ==========================================================================
+   Ambient Coder Army Floating Glowing Spotlights
+   ========================================================================== */
+.glow-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.orb-primary {
+    top: -180px;
+    left: 20%;
+    width: 680px;
+    height: 540px;
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.45) 0%, rgba(0, 240, 255, 0.22) 45%, transparent 75%);
+}
+
+.orb-secondary {
+    top: 35%;
+    right: -120px;
+    width: 540px;
+    height: 540px;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.32) 0%, rgba(29, 78, 216, 0.22) 55%, transparent 75%);
+}
+
+.orb-accent {
+    bottom: -150px;
+    left: 10%;
+    width: 620px;
+    height: 520px;
+    background: radial-gradient(circle, rgba(29, 78, 216, 0.35) 0%, rgba(6, 182, 212, 0.18) 55%, transparent 75%);
+}
+
+/* ==========================================================================
+   Container & Layout Guidelines (1180px - 1200px)
+   ========================================================================== */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    position: relative;
+    z-index: 1;
+}
+
+main.container {
+    flex: 1;
+    padding-top: 1.5rem;
+    padding-bottom: 4.5rem;
+}
+
+/* ==========================================================================
+   Navigation Bar (Coder Army Sticky Glass Header + Border Links)
+   ========================================================================== */
+.navbar {
+    background: rgba(3, 7, 18, 0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(59, 130, 246, 0.28);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.9), 0 0 20px rgba(59, 130, 246, 0.12);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    transition: all 0.3s ease;
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 72px;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    text-decoration: none;
+    color: var(--text-primary);
+}
+
+.brand-icon-box {
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius-md);
+    background: var(--gradient-brand);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    color: #ffffff;
+    box-shadow: var(--glow-blue-md);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-weight: 800;
+}
+
+.brand-text-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.brand-name {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+}
+
+.brand-name span {
+    color: var(--brand-cyan);
+    text-shadow: 0 0 15px rgba(0, 240, 255, 0.6);
+}
+
+.brand-tag {
+    font-size: 0.7rem;
+    font-family: var(--font-mono);
+    color: var(--brand-sky);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+}
+
+/* Coder Army Border Link Style for Navigation */
+.nav-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 0.45rem 1rem;
+    border-radius: var(--radius-pill);
+    border: 1px solid transparent;
+    transition: all 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.nav-link:hover {
+    color: #ffffff;
+    border-color: rgba(59, 130, 246, 0.5);
+    background: rgba(59, 130, 246, 0.12);
+    box-shadow: var(--glow-blue-sm);
+    text-shadow: 0 0 10px rgba(59, 130, 246, 0.8);
+}
+
+.nav-link.active {
+    color: #ffffff;
+    border-color: var(--brand-blue);
+    background: rgba(37, 99, 235, 0.22);
+    box-shadow: 0 0 18px rgba(59, 130, 246, 0.5), inset 0 0 10px rgba(59, 130, 246, 0.2);
+}
+
+/* Bell Notification Button */
+.nav-notif-btn {
+    position: relative;
+    background: rgba(17, 24, 39, 0.7);
+    border: 1px solid rgba(59, 130, 246, 0.35);
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 1.15rem;
+    padding: 0.45rem 0.65rem;
+    border-radius: var(--radius-pill);
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: all 0.25s ease;
+}
+
+.nav-notif-btn:hover {
+    color: #ffffff;
+    border-color: var(--brand-blue);
+    box-shadow: var(--glow-blue-sm);
+}
+
+.notif-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: var(--lost-red);
+    color: #ffffff;
+    font-size: 0.65rem;
+    font-weight: 800;
+    font-family: var(--font-mono);
+    padding: 0.15rem 0.38rem;
+    border-radius: 999px;
+    box-shadow: 0 0 12px rgba(239, 68, 68, 0.7);
+    border: 1px solid #ffffff;
+}
+
+/* Nav Support Phone Pill */
+.nav-phone-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(37, 99, 235, 0.12);
+    border: 1px solid rgba(59, 130, 246, 0.45);
+    padding: 0.38rem 0.95rem;
+    border-radius: var(--radius-pill);
+    color: #93C5FD;
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    box-shadow: 0 0 14px rgba(59, 130, 246, 0.25);
+    transition: all 0.25s ease;
+}
+
+.nav-phone-pill:hover {
+    border-color: #00F0FF;
+    color: #ffffff;
+    background: rgba(37, 99, 235, 0.25);
+    box-shadow: 0 0 22px rgba(59, 130, 246, 0.6);
+    transform: translateY(-1px);
+}
+
+/* User Profile Nav Pill */
+.nav-user-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(17, 24, 39, 0.85);
+    border: 1px solid rgba(59, 130, 246, 0.4);
+    padding: 0.35rem 0.85rem;
+    border-radius: var(--radius-pill);
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    box-shadow: 0 0 12px rgba(59, 130, 246, 0.2);
+    transition: all 0.25s ease;
+}
+
+.nav-user-pill:hover {
+    border-color: var(--brand-cyan);
+    box-shadow: var(--glow-blue-md);
+    transform: translateY(-1px);
+}
+
+.nav-avatar-circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--gradient-brand);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #ffffff;
+    box-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+}
+
+.mobile-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+/* ==========================================================================
+   Coder Army Signature Buttons (Electric Blue Glow & Border Links)
+   ========================================================================== */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1.45rem;
+    font-size: 0.92rem;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    border-radius: var(--radius-pill);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    border: 1px solid transparent;
+}
+
+/* Primary Electric Blue Glow Button */
+.btn-primary {
+    background: var(--gradient-brand);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.55), 0 4px 15px rgba(37, 99, 235, 0.4);
+}
+
+.btn-primary:hover {
+    color: #ffffff;
+    box-shadow: 0 0 32px rgba(59, 130, 246, 0.85), 0 0 50px rgba(0, 240, 255, 0.45);
+    transform: translateY(-2px) scale(1.02);
+}
+
+/* Secondary Translucent Glowing Border Link Button */
+.btn-secondary {
+    background: rgba(17, 24, 39, 0.75);
+    color: var(--text-primary);
+    border: 1px solid rgba(59, 130, 246, 0.45);
+    box-shadow: 0 0 12px rgba(59, 130, 246, 0.25), inset 0 0 10px rgba(59, 130, 246, 0.1);
+}
+
+.btn-secondary:hover {
+    background: rgba(26, 36, 58, 0.9);
+    border-color: #60A5FA;
+    box-shadow: 0 0 24px rgba(59, 130, 246, 0.65), inset 0 0 15px rgba(59, 130, 246, 0.25);
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* Outline Border Link */
+.btn-outline {
+    background: transparent;
+    color: var(--brand-sky);
+    border: 1px solid rgba(59, 130, 246, 0.45);
+}
+
+.btn-outline:hover {
+    background: rgba(59, 130, 246, 0.12);
+    border-color: var(--brand-blue);
+    box-shadow: var(--glow-blue-sm);
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* Lost Item Crimson Glow Button */
+.btn-lost {
+    background: var(--lost-red-bg);
+    color: #FCA5A5;
+    border: 1px solid rgba(239, 68, 68, 0.45);
+    box-shadow: 0 0 14px rgba(239, 68, 68, 0.25);
+}
+
+.btn-lost:hover {
+    background: rgba(239, 68, 68, 0.25);
+    border-color: var(--lost-red);
+    box-shadow: var(--lost-red-glow);
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* Found Item Emerald Glow Button */
+.btn-found {
+    background: var(--found-green-bg);
+    color: #6EE7B7;
+    border: 1px solid rgba(16, 185, 129, 0.45);
+    box-shadow: 0 0 14px rgba(16, 185, 129, 0.25);
+}
+
+.btn-found:hover {
+    background: rgba(16, 185, 129, 0.25);
+    border-color: var(--found-green);
+    box-shadow: var(--found-green-glow);
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* Purple AI Match Button */
+.btn-purple {
+    background: rgba(168, 85, 247, 0.15);
+    color: #D8B4FE;
+    border: 1px solid rgba(168, 85, 247, 0.45);
+    box-shadow: 0 0 12px rgba(168, 85, 247, 0.25);
+}
+
+.btn-purple:hover {
+    background: rgba(168, 85, 247, 0.3);
+    border-color: #C084FC;
+    box-shadow: var(--matched-purple-glow);
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+.btn-sm {
+    padding: 0.42rem 0.95rem;
+    font-size: 0.82rem;
+}
+
+/* ==========================================================================
+   Hero Section (Coder Army Tech Hero + Dynamic Headline)
+   ========================================================================== */
+.hero-section {
+    padding: 3.5rem 0 3rem 0;
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 3.5rem;
+    align-items: center;
+}
+
+.hero-left {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Coder Army Live Badge with Pulsing Blue Dot */
+.cyber-pill-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #93C5FD;
+    background: rgba(17, 24, 39, 0.8);
+    border: 1px solid rgba(59, 130, 246, 0.4);
+    padding: 0.38rem 0.95rem;
+    border-radius: var(--radius-pill);
+    width: fit-content;
+    margin-bottom: 1.35rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    box-shadow: var(--glow-blue-sm);
+}
+
+.pulse-indicator {
+    width: 8px;
+    height: 8px;
+    background: var(--brand-cyan);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--brand-cyan);
+    animation: livePulse 2s infinite;
+}
+
+@keyframes livePulse {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 240, 255, 0.8); }
+    70% { transform: scale(1.15); box-shadow: 0 0 0 8px rgba(0, 240, 255, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 240, 255, 0); }
+}
+
+.hero-title {
+    font-family: var(--font-heading);
+    font-size: 3.25rem;
+    font-weight: 800;
+    line-height: 1.18;
+    letter-spacing: -0.03em;
+    color: #ffffff;
+    margin-bottom: 1.25rem;
+}
+
+.gradient-text {
+    background: var(--gradient-text);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 35px rgba(59, 130, 246, 0.3);
+}
+
+/* Animated Dynamic Headline Rotator (Single Line Constraint) */
+.txt-rotate-wrap {
+    white-space: nowrap;
+    display: inline-block;
+    max-width: 100%;
+}
+
+.txt-rotate {
+    white-space: nowrap;
+    border-right: 3px solid var(--brand-cyan);
+    padding-right: 4px;
+    animation: blinkCursor 0.8s infinite;
+}
+
+@keyframes blinkCursor {
+    0%, 100% { border-color: var(--brand-cyan); }
+    50% { border-color: transparent; }
+}
+
+.hero-subtitle {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin-bottom: 2rem;
+    max-width: 560px;
+}
+
+.hero-ctas {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 2.25rem;
+}
+
+/* Hero Stats Row with Glowing Blue Borders */
+.hero-stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.hero-stat-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border-blue-subtle);
+    border-radius: var(--radius-md);
+    padding: 0.95rem 1.15rem;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(59, 130, 246, 0.05);
+    transition: all 0.25s ease;
+}
+
+.hero-stat-card:hover {
+    border-color: var(--brand-blue);
+    transform: translateY(-2px);
+    box-shadow: var(--glow-blue-md);
+}
+
+.hero-stat-num {
+    font-family: var(--font-mono);
+    font-size: 1.65rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 0.3rem;
+    color: #ffffff;
+}
+
+.hero-stat-card.lost .hero-stat-num {
+    color: var(--lost-red);
+    text-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+}
+
+.hero-stat-card.found .hero-stat-num {
+    color: var(--found-green);
+    text-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+}
+
+.hero-stat-card.reunited .hero-stat-num {
+    color: var(--brand-cyan);
+    text-shadow: 0 0 12px rgba(0, 240, 255, 0.4);
+}
+
+.hero-stat-label {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+/* ==========================================================================
+   CODER ARMY ANIMATED ROTATING CONIC GLOW BORDER BOX
+   (Laser Beam Border Line Travelling Continuously Around Rounded Corners)
+   ========================================================================== */
+.glow-border-box {
+    position: relative;
+    border-radius: var(--radius-xl);
+    background: #050811;
+    padding: 2.5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    box-shadow: 0 0 35px rgba(59, 130, 246, 0.5), 0 0 70px rgba(0, 240, 255, 0.22);
+}
+
+.glow-border-box::before {
+    content: '';
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    top: -50%;
+    left: -50%;
+    background: conic-gradient(
+        from 0deg at 50% 50%,
+        transparent 0deg,
+        #1D4ED8 25deg,
+        #2563EB 50deg,
+        #3B82F6 72deg,
+        #00F0FF 90deg,
+        #FFFFFF 96deg,
+        #00F0FF 102deg,
+        #3B82F6 122deg,
+        #2563EB 144deg,
+        #1D4ED8 165deg,
+        transparent 195deg,
+        transparent 360deg
+    );
+    animation: laserBorderRotate 4.5s linear infinite;
+    z-index: 0;
+}
+
+@keyframes laserBorderRotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.showcase-wrapper {
+    position: relative;
+    background: #060911;
+    border-radius: calc(var(--radius-xl) - 2px);
+    padding: 1.25rem;
+    overflow: hidden;
+    width: 100%;
+    z-index: 1;
+    box-shadow: inset 0 0 25px rgba(59, 130, 246, 0.18);
+}
+
+.showcase-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.showcase-header-title {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--brand-cyan);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
+}
+
+.showcase-badge {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: #93C5FD;
+    background: rgba(37, 99, 235, 0.18);
+    border: 1px solid rgba(59, 130, 246, 0.35);
+    padding: 0.2rem 0.55rem;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.2);
+}
+
+/* Ticker Viewport */
+.ticker-viewport {
+    height: 380px;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Top & Bottom Gradient Fade Mask */
+.ticker-viewport::before, .ticker-viewport::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 40px;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.ticker-viewport::before {
+    top: 0;
+    background: linear-gradient(to bottom, #060911 0%, transparent 100%);
+}
+
+.ticker-viewport::after {
+    bottom: 0;
+    background: linear-gradient(to top, #060911 0%, transparent 100%);
+}
+
+.ticker-track {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    animation: scrollUpTicker 22s linear infinite;
+}
+
+.ticker-track:hover {
+    animation-play-state: paused;
+}
+
+@keyframes scrollUpTicker {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-50%); }
+}
+
+/* Individual Showcase Card */
+.ticker-card {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    background: rgba(10, 15, 26, 0.9);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    border-radius: var(--radius-md);
+    padding: 0.75rem;
+    backdrop-filter: blur(8px);
+    transition: all 0.25s ease;
+    text-decoration: none;
+    color: inherit;
+}
+
+.ticker-card:hover {
+    border-color: #60A5FA;
+    box-shadow: var(--glow-blue-md);
+    background: rgba(23, 33, 59, 0.95);
+    transform: scale(1.02);
+}
+
+.ticker-img {
+    width: 62px;
+    height: 62px;
+    border-radius: var(--radius-sm);
+    object-fit: cover;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    flex-shrink: 0;
+}
+
+.ticker-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.ticker-top-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 0.25rem;
+}
+
+.ticker-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0.2rem;
+}
+
+.ticker-sub {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+/* ==========================================================================
+   Badges (Pill Glowing States for Lost, Found, Matched, Confidence)
+   ========================================================================== */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.74rem;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    padding: 0.22rem 0.6rem;
+    border-radius: var(--radius-pill);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.badge-lost {
+    background: var(--lost-red-bg);
+    color: #F87171;
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.25);
+}
+
+.badge-found {
+    background: var(--found-green-bg);
+    color: #34D399;
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.25);
+}
+
+.badge-matched {
+    background: var(--matched-purple-bg);
+    color: #C084FC;
+    border: 1px solid rgba(168, 85, 247, 0.45);
+    box-shadow: 0 0 12px rgba(168, 85, 247, 0.3);
+}
+
+.badge-resolved {
+    background: var(--resolved-cyan-bg);
+    color: var(--brand-cyan);
+    border: 1px solid rgba(0, 240, 255, 0.4);
+    box-shadow: 0 0 12px rgba(0, 240, 255, 0.3);
+}
+
+.badge-confidence {
+    background: rgba(37, 99, 235, 0.2);
+    color: #93C5FD;
+    border: 1px solid rgba(59, 130, 246, 0.45);
+    box-shadow: var(--glow-blue-sm);
+}
+
+/* ==========================================================================
+   Filter & Search Toolbar (Coder Army Sleek Dark Card + Glowing Border Focus)
+   ========================================================================== */
+.filter-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border-blue-subtle);
+    border-radius: var(--radius-lg);
+    padding: 1.35rem;
+    margin-bottom: 2.25rem;
+    backdrop-filter: blur(16px);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(59, 130, 246, 0.05);
+}
+
+.filter-top-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.type-toggle-group {
+    display: inline-flex;
+    background: rgba(7, 11, 20, 0.95);
+    border: 1px solid rgba(59, 130, 246, 0.35);
+    border-radius: var(--radius-pill);
+    padding: 4px;
+    gap: 4px;
+}
+
+.type-toggle-btn {
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.45rem 1.15rem;
+    border-radius: var(--radius-pill);
+    color: var(--text-secondary);
+    transition: all 0.2s ease;
+}
+
+.type-toggle-btn:hover {
+    color: #ffffff;
+}
+
+.type-toggle-btn.active-all {
+    background: var(--gradient-brand);
+    color: #ffffff;
+    box-shadow: var(--glow-blue-sm);
+}
+
+.type-toggle-btn.active-lost {
+    background: var(--lost-red);
+    color: #ffffff;
+    box-shadow: var(--lost-red-glow);
+}
+
+.type-toggle-btn.active-found {
+    background: var(--found-green);
+    color: #ffffff;
+    box-shadow: var(--found-green-glow);
+}
+
+.search-input-group {
+    flex: 1;
+    min-width: 260px;
+    display: flex;
+    align-items: center;
+    background: rgba(7, 11, 20, 0.95);
+    border: 1px solid rgba(59, 130, 246, 0.35);
+    border-radius: var(--radius-pill);
+    padding: 0 1.1rem;
+    transition: all 0.25s ease;
+}
+
+.search-input-group:focus-within {
+    border-color: var(--brand-blue);
+    box-shadow: var(--glow-blue-md);
+}
+
+.search-icon {
+    color: var(--brand-sky);
+    margin-right: 0.65rem;
+}
+
+.search-input-group input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #ffffff;
+    font-size: 0.92rem;
+    padding: 0.65rem 0;
+    font-family: var(--font-sans);
+}
+
+.search-input-group input::placeholder {
+    color: var(--text-muted);
+}
+
+.filter-bottom-row {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.filter-select {
+    background: rgba(7, 11, 20, 0.95);
+    border: 1px solid rgba(59, 130, 246, 0.35);
+    color: var(--text-primary);
+    padding: 0.5rem 0.95rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.85rem;
+    font-family: var(--font-sans);
+    outline: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-select:hover, .filter-select:focus {
+    border-color: var(--brand-blue);
+    box-shadow: var(--glow-blue-sm);
+}
+
+/* ==========================================================================
+   3-Column Item Feed Cards (Coder Army Course/Feature Card Look)
+   ========================================================================== */
+.items-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.item-card {
+    background: var(--surface-card);
+    border: 1px solid rgba(59, 130, 246, 0.35);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.9), 0 0 15px rgba(59, 130, 246, 0.12);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    cursor: pointer;
+}
+
+.item-card:hover {
+    border-color: var(--brand-blue);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.95), 0 0 32px rgba(59, 130, 246, 0.7), 0 0 60px rgba(0, 240, 255, 0.28), inset 0 0 15px rgba(59, 130, 246, 0.15);
+    transform: translateY(-5px);
+}
+
+.item-card:hover .card-title {
+    color: #60A5FA;
+    transition: color 0.25s ease;
+}
+
+/* Stretched Clickable Overlay Link - Opens Item Details on Click */
+.card-clickable-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: inherit;
+    text-indent: -9999px;
+    outline: none;
+    cursor: pointer;
+}
+
+.card-img-wrap {
+    height: 195px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    background: #050811;
+    pointer-events: none;
+}
+
+.card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.item-card:hover .card-img {
+    transform: scale(1.06);
+}
+
+.card-badge-floating {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.card-status-floating {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.card-body {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.card-title {
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 0.45rem;
+    line-height: 1.35;
+}
+
+.card-meta {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.card-desc {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    margin-bottom: 0.85rem;
+    flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Card Reporter Phone / Contact Row */
+.card-contact-row {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.85rem;
+    align-items: center;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 2;
+}
+
+.card-phone-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(37, 99, 235, 0.12);
+    border: 1px solid rgba(59, 130, 246, 0.45);
+    color: #93C5FD;
+    padding: 0.35rem 0.8rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.82rem;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    position: relative;
+    z-index: 2;
+    pointer-events: auto;
+}
+
+.card-phone-btn:hover {
+    border-color: #00F0FF;
+    color: #ffffff;
+    background: rgba(37, 99, 235, 0.28);
+    box-shadow: 0 0 16px rgba(59, 130, 246, 0.5);
+    transform: translateY(-1px);
+}
+
+.card-wa-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.45);
+    color: #6EE7B7;
+    padding: 0.35rem 0.8rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    position: relative;
+    z-index: 2;
+    pointer-events: auto;
+}
+
+.card-wa-btn:hover {
+    border-color: #10B981;
+    color: #ffffff;
+    background: rgba(16, 185, 129, 0.28);
+    box-shadow: 0 0 16px rgba(16, 185, 129, 0.5);
+    transform: translateY(-1px);
+}
+
+.ticker-phone {
+    color: #60A5FA;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    font-weight: 700;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 0.85rem;
+    border-top: 1px solid rgba(59, 130, 246, 0.18);
+    position: relative;
+    z-index: 2;
+}
+
+.card-footer a,
+.card-footer button {
+    position: relative;
+    z-index: 2;
+    pointer-events: auto;
+}
+
+.card-time {
+    font-size: 0.78rem;
+    font-family: var(--font-mono);
+    color: var(--text-dim);
+}
+
+/* ==========================================================================
+   Match Results Page (Top Match Side-by-Side Prominent Card)
+   ========================================================================== */
+.match-hero-card {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%);
+    border: 1px solid rgba(59, 130, 246, 0.45);
+    border-radius: var(--radius-xl);
+    padding: 2.25rem;
+    margin-bottom: 2.5rem;
+    box-shadow: 0 0 35px rgba(59, 130, 246, 0.3), inset 0 0 20px rgba(59, 130, 246, 0.1);
+}
+
+.match-side-by-side {
+    display: grid;
+    grid-template-columns: 1fr 120px 1fr;
+    gap: 1.5rem;
+    align-items: center;
+    margin: 1.75rem 0;
+}
+
+.match-compare-box {
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    border-radius: var(--radius-lg);
+    padding: 1.35rem;
+    display: flex;
+    gap: 1.25rem;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.match-compare-img {
+    width: 90px;
+    height: 90px;
+    border-radius: var(--radius-md);
+    object-fit: cover;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+    flex-shrink: 0;
+}
+
+.match-center-dial {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.match-dial-percent {
+    font-size: 1.9rem;
+    font-weight: 800;
+    font-family: var(--font-mono);
+    color: var(--brand-cyan);
+    text-shadow: 0 0 18px rgba(0, 240, 255, 0.6);
+    line-height: 1;
+}
+
+.match-dial-sub {
+    font-size: 0.72rem;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 0.3rem;
+}
+
+/* Confidence Progress Bar */
+.confidence-bar-wrap {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    height: 10px;
+    width: 100%;
+    overflow: hidden;
+    margin: 1.25rem 0;
+}
+
+.confidence-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #3B82F6 0%, #00F0FF 100%);
+    box-shadow: 0 0 18px rgba(0, 240, 255, 0.7);
+    border-radius: 999px;
+    transition: width 1s ease-in-out;
+}
+
+/* ==========================================================================
+   Item Details Layout
+   ========================================================================== */
+.detail-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.15fr;
+    gap: 2.75rem;
+    margin-bottom: 3.5rem;
+}
+
+.detail-img-box {
+    background: var(--surface-card);
+    border: 1px solid rgba(59, 130, 246, 0.35);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    position: sticky;
+    top: 96px;
+    box-shadow: var(--glow-blue-md);
+}
+
+.detail-img-box img {
+    width: 100%;
+    max-height: 480px;
+    object-fit: cover;
+    display: block;
+}
+
+.contact-shield-box {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95));
+    border: 1px solid rgba(59, 130, 246, 0.45);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+    box-shadow: var(--glow-blue-sm);
+}
+
+/* ==========================================================================
+   Forms (Coder Army Glow Inputs & Dropzones)
+   ========================================================================== */
+.form-card {
+    max-width: 680px;
+    margin: 2rem auto;
+    background: var(--surface-card);
+    border: 1px solid rgba(59, 130, 246, 0.35);
+    border-radius: var(--radius-xl);
+    padding: 2.5rem;
+    backdrop-filter: blur(16px);
+    box-shadow: 0 8px 35px rgba(0, 0, 0, 0.7), 0 0 25px rgba(59, 130, 246, 0.15);
+}
+
+.form-group {
+    margin-bottom: 1.35rem;
+}
+
+.form-label {
+    display: block;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    margin-bottom: 0.45rem;
+}
+
+.form-control {
+    width: 100%;
+    background: rgba(15, 23, 42, 0.92);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    color: #ffffff;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    font-size: 0.95rem;
+    font-family: var(--font-sans);
+    outline: none;
+    transition: all 0.25s ease;
+}
+
+.form-control:focus {
+    border-color: var(--brand-blue);
+    box-shadow: var(--glow-blue-md), inset 0 0 10px rgba(59, 130, 246, 0.15);
+    background: rgba(15, 23, 42, 0.98);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+/* Type Segmented Radio Controls */
+.type-radio-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.type-radio-card {
+    position: relative;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    background: rgba(15, 23, 42, 0.85);
+    border-radius: var(--radius-lg);
+    padding: 1.25rem;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.25s ease;
+}
+
+.type-radio-card input {
+    position: absolute;
+    opacity: 0;
+}
+
+.type-radio-card:has(input:checked).card-lost {
+    border-color: var(--lost-red);
+    background: rgba(239, 68, 68, 0.15);
+    box-shadow: var(--lost-red-glow);
+}
+
+.type-radio-card:has(input:checked).card-found {
+    border-color: var(--found-green);
+    background: rgba(16, 185, 129, 0.15);
+    box-shadow: var(--found-green-glow);
+}
+
+/* Photo Dropzone */
+.dropzone-box {
+    border: 2px dashed rgba(59, 130, 246, 0.4);
+    background: rgba(15, 23, 42, 0.75);
+    border-radius: var(--radius-lg);
+    padding: 2.25rem;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.25s ease;
+}
+
+.dropzone-box:hover, .dropzone-box.dragover {
+    border-color: var(--brand-cyan);
+    background: rgba(0, 240, 255, 0.05);
+    box-shadow: var(--glow-blue-sm);
+}
+
+.dropzone-box input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+}
+
+.preview-container {
+    display: none;
+    position: relative;
+    margin-top: 1rem;
+}
+
+.preview-container img {
+    max-height: 220px;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+    display: block;
+    margin: 0 auto;
+}
+
+/* ==========================================================================
+   Admin Moderation Dashboard Tables & Tabs
+   ========================================================================== */
+.admin-tabs {
+    display: flex;
+    gap: 0.5rem;
+    border-bottom: 1px solid rgba(59, 130, 246, 0.25);
+    margin-bottom: 1.5rem;
+}
+
+.admin-tab-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 0.75rem 1.35rem;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.admin-tab-btn:hover {
+    color: #ffffff;
+}
+
+.admin-tab-btn.active {
+    color: var(--brand-cyan);
+    border-bottom-color: var(--brand-cyan);
+    text-shadow: 0 0 12px rgba(0, 240, 255, 0.5);
+}
+
+.admin-table-wrap {
+    background: var(--surface-card);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    border-radius: var(--radius-lg);
+    overflow-x: auto;
+    backdrop-filter: blur(16px);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.6);
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.table th {
+    background: rgba(37, 99, 235, 0.1);
+    padding: 0.85rem 1rem;
+    font-size: 0.78rem;
+    font-family: var(--font-mono);
+    color: #93C5FD;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid rgba(59, 130, 246, 0.25);
+}
+
+.table td {
+    padding: 0.95rem 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    vertical-align: middle;
+}
+
+.table tr:hover td {
+    background: rgba(59, 130, 246, 0.05);
+}
+
+/* ==========================================================================
+   Alerts & Notifications
+   ========================================================================== */
+.alert {
+    padding: 0.85rem 1.25rem;
+    border-radius: var(--radius-md);
+    margin-bottom: 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.92rem;
+    font-weight: 600;
+}
+
+.alert-success {
+    background: var(--found-green-bg);
+    border: 1px solid rgba(16, 185, 129, 0.45);
+    color: #6EE7B7;
+    box-shadow: var(--found-green-glow);
+}
+
+.alert-danger {
+    background: var(--lost-red-bg);
+    border: 1px solid rgba(239, 68, 68, 0.45);
+    color: #FCA5A5;
+    box-shadow: var(--lost-red-glow);
+}
+
+.alert-info {
+    background: rgba(37, 99, 235, 0.18);
+    border: 1px solid rgba(59, 130, 246, 0.45);
+    color: #93C5FD;
+    box-shadow: var(--glow-blue-sm);
+}
+
+.alert-warning {
+    background: rgba(245, 158, 11, 0.12);
+    border: 1px solid rgba(245, 158, 11, 0.45);
+    color: #FCD34D;
+}
+
+.alert-close {
+    background: transparent;
+    border: none;
+    color: inherit;
+    font-size: 1.25rem;
+    cursor: pointer;
+    opacity: 0.7;
+}
+
+.alert-close:hover {
+    opacity: 1;
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+.footer {
+    background: #020409;
+    border-top: 1px solid rgba(59, 130, 246, 0.25);
+    padding: 2.5rem 0;
+    margin-top: auto;
+    font-size: 0.88rem;
+    color: var(--text-muted);
+}
+
+.footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* ==========================================================================
+   Responsive Breakpoints
+   ========================================================================== */
+@media (max-width: 1024px) {
+    .hero-section {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+    }
+    .items-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .match-side-by-side {
+        grid-template-columns: 1fr;
+    }
+    .detail-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 640px) {
+    .items-grid {
+        grid-template-columns: 1fr;
+    }
+    .hero-title {
+        font-size: 2.35rem;
+    }
+    .hero-stats-row {
+        grid-template-columns: 1fr;
+    }
+    .nav-links {
+        display: none;
+    }
+    .mobile-toggle {
+        display: block;
+    }
+    .nav-links.show {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 72px;
+        left: 0;
+        right: 0;
+        background: #050811;
+        border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+        padding: 1.5rem;
+        gap: 1rem;
+    }
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+}

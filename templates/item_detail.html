@@ -1,0 +1,217 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ item.title }} - LostLink{% endblock %}
+
+{% block content %}
+<div style="margin: 2rem 0;">
+    <!-- Top Action Toolbar -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 0.75rem;">
+        <a href="{{ url_for('index') }}" class="btn btn-secondary btn-sm">
+            &larr; Back to Feed
+        </a>
+
+        <div style="display: flex; gap: 0.6rem; align-items: center;">
+            <a href="{{ url_for('matches', item_id=item.id) }}" class="btn btn-purple btn-sm">
+                ⚡ Check AI Matches
+            </a>
+
+            <!-- Claim Item Button (PDF spec #23) -->
+            {% if item.is_found() and item.status != 'resolved' %}
+                <a href="{{ url_for('claim_item', item_id=item.id) }}" class="btn btn-primary btn-sm">
+                    🎯 Claim This Item ↗
+                </a>
+            {% endif %}
+
+            <!-- Mark Resolved / Returned -->
+            <form method="POST" action="{{ url_for('resolve_item', item_id=item.id) }}" onsubmit="return confirm('Toggle resolution status for this item?');" style="display: inline;">
+                <button type="submit" class="btn {% if item.is_resolved() %}btn-secondary{% else %}btn-found{% endif %} btn-sm">
+                    {% if item.is_resolved() %}Reopen Item{% else %}✓ Mark as Resolved{% endif %}
+                </button>
+            </form>
+
+            <!-- Edit / Delete if Reporter or Admin (PDF specs #17 & #18) -->
+            {% if current_user and (item.user_id == current_user.id or current_user.is_admin()) %}
+                <a href="{{ url_for('edit_item', item_id=item.id) }}" class="btn btn-secondary btn-sm" title="Edit this report">
+                    ✏ Edit
+                </a>
+                <form method="POST" action="{{ url_for('delete_item', item_id=item.id) }}" onsubmit="return confirm('Permanently delete this report?');" style="display: inline;">
+                    <button type="submit" class="btn btn-lost btn-sm" title="Delete post">
+                        ✕ Delete
+                    </button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Main Detail Layout (Sticky Image Left, Info Right) -->
+    <div class="detail-layout">
+        <!-- Sticky Left: Image Box -->
+        <div class="detail-img-box">
+            {% if item.image_path %}
+                <img src="{{ url_for('uploaded_file', filename=item.image_path) }}" alt="{{ item.title }}">
+            {% else %}
+                <img src="{{ url_for('static', filename='images/default-item.svg') }}" alt="No photo available">
+            {% endif %}
+        </div>
+
+        <!-- Right: Information & Protected Contact Section -->
+        <div>
+            <!-- Status & Type Badges -->
+            <div style="display: flex; gap: 0.5rem; margin-bottom: 0.85rem; align-items: center; flex-wrap: wrap;">
+                {% if item.is_lost() %}
+                    <span class="badge badge-lost" style="font-size: 0.85rem;">● Lost Report</span>
+                {% else %}
+                    <span class="badge badge-found" style="font-size: 0.85rem;">● Found Report</span>
+                {% endif %}
+
+                {% if item.is_resolved() %}
+                    <span class="badge badge-resolved" style="font-size: 0.85rem;">✓ Resolved / Returned</span>
+                {% elif item.is_matched() %}
+                    <span class="badge badge-matched" style="font-size: 0.85rem;">⚡ Matched With Opposite Item</span>
+                {% else %}
+                    <span class="badge" style="background: rgba(0, 242, 254, 0.1); color: var(--cyber-cyan); border: 1px solid rgba(0, 242, 254, 0.3); font-size: 0.85rem;">
+                        Status: Active Open
+                    </span>
+                {% endif %}
+            </div>
+
+            <!-- Title -->
+            <h1 style="font-size: 2.25rem; font-weight: 800; color: #ffffff; margin-bottom: 0.85rem; line-height: 1.25;">
+                {{ item.title }}
+            </h1>
+
+            <!-- Meta Attributes -->
+            <div style="display: flex; flex-direction: column; gap: 0.45rem; margin-bottom: 1.5rem; font-size: 0.95rem; color: var(--text-muted);">
+                <div>📁 <strong style="color: #ffffff;">Category:</strong> {{ item.category }}</div>
+                <div>📍 <strong style="color: #ffffff;">Campus Location:</strong> {{ item.location }}</div>
+                <div>👤 <strong style="color: #ffffff;">Reported By:</strong> {{ item.reporter_name }}</div>
+                <div style="font-family: var(--font-mono); font-size: 0.85rem;">
+                    🕒 <strong style="color: #ffffff;">Timestamp:</strong> {{ item.created_at.strftime('%B %d, %Y at %I:%M %p') if item.created_at else 'Recently' }} ({{ item.time_ago }})
+                </div>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid var(--border-hairline); margin-bottom: 1.5rem;">
+
+            <!-- Full Description -->
+            <div style="margin-bottom: 2rem;">
+                <h3 style="font-size: 0.88rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.65rem; color: var(--cyber-cyan); font-family: var(--font-mono);">
+                    // DETAILED DESCRIPTION
+                </h3>
+                <p style="font-size: 1rem; line-height: 1.7; color: var(--text-secondary); white-space: pre-line;">
+                    {{ item.description }}
+                </p>
+            </div>
+
+            <!-- Protected Contact Reporter Shield Box (PDF spec #15 & PDF 2 page 5) -->
+            <div class="contact-shield-box">
+                <div style="font-size: 0.78rem; font-family: var(--font-mono); font-weight: 700; text-transform: uppercase; color: var(--cyber-cyan); margin-bottom: 0.5rem; letter-spacing: 0.08em;">
+                    REPORTER CONTACT VERIFICATION
+                </div>
+                
+                <div id="protectedContactPrompt">
+                    <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                        Contact details are protected by default to prevent spam. Tap below to reveal the verified contact details.
+                    </p>
+                    <button type="button" class="btn btn-primary" onclick="revealContact(this)">
+                        👁 Tap to Reveal Reporter Contact
+                    </button>
+                </div>
+
+                <!-- Revealed Contact Details -->
+                <div id="protectedContactContent" style="display: none; margin-top: 0.75rem;">
+                    <div style="font-family: var(--font-mono); font-size: 1.25rem; font-weight: 800; color: #ffffff; margin-bottom: 0.85rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="color: var(--brand-cyan);">📞</span>
+                        <span style="color: #60A5FA;">{{ item.contact }}</span>
+                    </div>
+                    <div style="display: flex; gap: 0.6rem; flex-wrap: wrap;">
+                        {% if item.phone_digits %}
+                            <a href="tel:{{ item.phone_digits }}" class="btn btn-primary btn-sm">
+                                📞 Call Now
+                            </a>
+                            <a href="https://wa.me/{{ item.phone_digits }}" target="_blank" rel="noopener" class="btn btn-found btn-sm">
+                                💬 WhatsApp Chat ↗
+                            </a>
+                        {% endif %}
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('{{ item.contact }}', this)">
+                            📋 Copy Phone / Contact
+                        </button>
+                        {% if '@' in item.contact %}
+                            <a href="mailto:{{ item.contact }}" class="btn btn-outline btn-sm">
+                                ✉ Email Reporter
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Report Abuse / Flag Post (PDF spec #29) -->
+            <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end;">
+                <form method="POST" action="{{ url_for('flag_item', item_id=item.id) }}" onsubmit="return confirm('Flag this report as suspicious or duplicate for admin moderation?');">
+                    <button type="submit" style="background: transparent; border: none; color: var(--text-dim); font-size: 0.8rem; cursor: pointer; text-decoration: underline;">
+                        🚩 Report abuse or spam
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Related Potential Matches for this item -->
+    {% if related_matches %}
+        <div style="margin-top: 4rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h2 style="font-size: 1.45rem; font-weight: 800; color: #ffffff;">
+                    Suggested AI Opposite Matches
+                </h2>
+                <a href="{{ url_for('matches', item_id=item.id) }}" class="btn btn-purple btn-sm">
+                    View Full Match Report ↗
+                </a>
+            </div>
+
+            <div class="items-grid">
+                {% for m in related_matches %}
+                    {% set cand = m.item %}
+                    <div class="item-card" onclick="if(!event.target.closest('a, button, input')) window.location.href='{{ url_for('item_details', item_id=cand.id) }}'">
+                        <!-- Entire Card Clickable Overlay Link -->
+                        <a href="{{ url_for('item_details', item_id=cand.id) }}" class="card-clickable-overlay" aria-label="View {{ cand.title }} details"></a>
+                        <div class="card-img-wrap">
+                            {% if cand.image_path %}
+                                <img src="{{ url_for('uploaded_file', filename=cand.image_path) }}" alt="{{ cand.title }}" class="card-img">
+                            {% else %}
+                                <img src="{{ url_for('static', filename='images/default-item.svg') }}" alt="No photo" class="card-img">
+                            {% endif %}
+
+                            <div class="card-badge-floating">
+                                {% if cand.is_lost() %}
+                                    <span class="badge badge-lost">● Lost</span>
+                                {% else %}
+                                    <span class="badge badge-found">● Found</span>
+                                {% endif %}
+                            </div>
+
+                            <div class="card-status-floating">
+                                <span class="badge badge-confidence">{{ m.percentage }}% Match</span>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <h3 class="card-title">{{ cand.title }}</h3>
+                            <div class="card-meta">
+                                <span>📍 {{ cand.location }}</span>
+                                <span>&bull;</span>
+                                <span>📁 {{ cand.category }}</span>
+                            </div>
+                            <p class="card-desc">{{ cand.description }}</p>
+                            <div class="card-footer">
+                                <span class="card-time">🕒 {{ cand.time_ago }}</span>
+                                <a href="{{ url_for('item_details', item_id=cand.id) }}" class="btn btn-secondary btn-sm">
+                                    Inspect ↗
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

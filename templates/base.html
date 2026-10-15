@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}LostLink - AI-Powered Campus Lost &amp; Found{% endblock %}</title>
+    <meta name="description" content="LostLink: Next-generation multimodal AI lost and found platform for university and college campuses.">
+    
+    <!-- Coder Army Google Fonts: Poppins, Inter, Rubik, JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700;800;900&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- LostLink Cyber Design Stylesheet & Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body class="coderarmy-theme">
+    <!-- Ambient Coder Army Glowing Spotlights -->
+    <div class="glow-orb orb-primary"></div>
+    <div class="glow-orb orb-secondary"></div>
+    <div class="glow-orb orb-accent"></div>
+
+    <!-- Top Navigation Bar (Coder Army Sticky Glass Header) -->
+    <header class="navbar">
+        <div class="container nav-container">
+            <a href="{{ url_for('index') }}" class="navbar-brand">
+                <div class="brand-icon-box">⚡</div>
+                <div class="brand-text-wrapper">
+                    <span class="brand-name">Lost<span>Link</span></span>
+                    <span class="brand-tag">// CAMPUS AI NETWORK</span>
+                </div>
+            </a>
+
+            <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation">
+                ☰
+            </button>
+
+            <nav class="nav-links" id="navLinks">
+                <a href="{{ url_for('index') }}" class="nav-link {% if request.endpoint == 'index' %}active{% endif %}">
+                    Explore Feed
+                </a>
+                
+                {% if current_user %}
+                    <a href="{{ url_for('my_reports') }}" class="nav-link {% if request.endpoint == 'my_reports' %}active{% endif %}">
+                        My Reports
+                    </a>
+                {% endif %}
+
+                <a href="{{ url_for('admin_dashboard') }}" class="nav-link {% if request.endpoint == 'admin_dashboard' %}active{% endif %}">
+                    Admin Portal
+                </a>
+
+                {% if current_user %}
+                    <!-- Notifications -->
+                    <a href="{{ url_for('notifications') }}" class="nav-notif-btn" title="In-App Notifications">
+                        🔔
+                        {% if unread_notifications_count > 0 %}
+                            <span class="notif-badge">{{ unread_notifications_count }}</span>
+                        {% endif %}
+                    </a>
+
+                    <!-- User Profile Dropdown Pill -->
+                    <a href="{{ url_for('profile') }}" class="nav-user-pill">
+                        <span class="nav-avatar-circle">{{ current_user.name[:1].upper() }}</span>
+                        <span>{{ current_user.name.split()[0] }}</span>
+                    </a>
+
+                    <a href="{{ url_for('logout') }}" class="nav-link" style="color: var(--text-muted); font-size: 0.85rem;" title="Sign out">
+                        Logout
+                    </a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="nav-link {% if request.endpoint == 'login' %}active{% endif %}">
+                        Login
+                    </a>
+                    <a href="{{ url_for('signup') }}" class="btn btn-secondary btn-sm">
+                        Sign Up
+                    </a>
+                {% endif %}
+
+                <!-- Primary CTA -->
+                <a href="{{ url_for('post_item') }}" class="btn btn-primary btn-sm">
+                    <span>+</span> Report Item ↗
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Flash Notifications Container -->
+    <div class="container" style="margin-top: 1.25rem;">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        <div>
+                            {% if category == 'success' %}✓ {% elif category == 'danger' %}⚠ {% else %}ℹ {% endif %}
+                            {{ message }}
+                        </div>
+                        <button class="alert-close" aria-label="Dismiss alert">&times;</button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div>
+                <strong style="color: #ffffff; font-size: 1rem;">LostLink &bull; Campus Lost &amp; Found Network</strong>
+                <div style="font-size: 0.82rem; margin-top: 0.35rem; color: var(--text-muted);">
+                    Autonomous multimodal similarity matching via OpenAI CLIP ViT-B-32 &bull; High-speed cosine dot product
+                </div>
+                <!-- Campus Support Contact Details -->
+                <div class="footer-contact-row" style="margin-top: 0.75rem; display: flex; gap: 1.25rem; font-size: 0.82rem; flex-wrap: wrap;">
+                    <a href="mailto:lostfound@campus.edu" style="color: var(--text-secondary); text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem;">
+                        ✉ <strong>Campus Desk:</strong> lostfound@campus.edu
+                    </a>
+                </div>
+            </div>
+            <div style="display: flex; gap: 1.5rem; font-size: 0.82rem; font-family: var(--font-mono);">
+                <a href="{{ url_for('index') }}" style="color: var(--text-secondary); text-decoration: none;">Feed</a>
+                <a href="{{ url_for('post_item') }}" style="color: var(--text-secondary); text-decoration: none;">Report Item</a>
+                <a href="{{ url_for('admin_dashboard') }}" style="color: var(--text-secondary); text-decoration: none;">Moderation</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Main JavaScript -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

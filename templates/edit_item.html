@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Report #{{ item.id }} - LostLink{% endblock %}
+
+{% block content %}
+<div class="form-card">
+    <div style="margin-bottom: 2rem; text-align: center;">
+        <div style="display: inline-block; font-family: var(--font-mono); font-size: 0.8rem; color: var(--cyber-cyan); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.08em;">
+            // EDIT REPORT
+        </div>
+        <h1 style="font-size: 2.2rem; font-weight: 800; color: #ffffff;">
+            Edit Post #{{ item.id }}
+        </h1>
+        <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 0.35rem;">
+            Update information or upload a clearer photo to improve AI matching accuracy.
+        </p>
+    </div>
+
+    <form method="POST" action="{{ url_for('edit_item', item_id=item.id) }}" enctype="multipart/form-data">
+        <!-- Title -->
+        <div class="form-group">
+            <label class="form-label" for="title">Item Title *</label>
+            <input type="text" id="title" name="title" class="form-control" value="{{ item.title }}" required maxlength="150">
+        </div>
+
+        <!-- Category & Location -->
+        <div class="form-row">
+            <div class="form-group">
+                <label class="form-label" for="category">Category *</label>
+                <select id="category" name="category" class="form-control" required>
+                    <option value="Earphones" {% if item.category == 'Earphones' %}selected{% endif %}>Earphones &amp; Headphones</option>
+                    <option value="ID Card" {% if item.category == 'ID Card' %}selected{% endif %}>ID Card &amp; Student Badge</option>
+                    <option value="Phone / Laptop" {% if item.category == 'Phone / Laptop' %}selected{% endif %}>Phone, Laptop &amp; Gadgets</option>
+                    <option value="Bag / Backpack" {% if item.category == 'Bag / Backpack' %}selected{% endif %}>Bag, Backpack &amp; Pouches</option>
+                    <option value="Keys" {% if item.category == 'Keys' %}selected{% endif %}>Keys &amp; Keychains</option>
+                    <option value="Books / Notes" {% if item.category == 'Books / Notes' %}selected{% endif %}>Books &amp; Notebooks</option>
+                    <option value="Wallet / Purse" {% if item.category == 'Wallet / Purse' %}selected{% endif %}>Wallet, Cards &amp; Money</option>
+                    <option value="Water Bottle" {% if item.category == 'Water Bottle' %}selected{% endif %}>Water Bottle &amp; Flask</option>
+                    <option value="Clothing / Accessories" {% if item.category == 'Clothing / Accessories' %}selected{% endif %}>Clothing &amp; Watch</option>
+                    <option value="Others" {% if item.category == 'Others' %}selected{% endif %}>Others</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="location">Campus Location *</label>
+                <input type="text" id="location" name="location" class="form-control" value="{{ item.location }}" required maxlength="150">
+            </div>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+            <label class="form-label" for="description">Detailed Description *</label>
+            <textarea id="description" name="description" class="form-control" rows="4" required>{{ item.description }}</textarea>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="form-group">
+            <label class="form-label" for="contact">Contact Information *</label>
+            <input type="text" id="contact" name="contact" class="form-control" value="{{ item.contact }}" required maxlength="150">
+        </div>
+
+        <!-- Update Photo -->
+        <div class="form-group">
+            <label class="form-label">Replace Photo (Optional)</label>
+            {% if item.image_path %}
+                <div style="margin-bottom: 0.75rem;">
+                    <img src="{{ url_for('uploaded_file', filename=item.image_path) }}" alt="{{ item.title }}" 
+                         style="max-height: 120px; border-radius: var(--radius-md); border: 1px solid var(--border-hairline);">
+                    <div style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono); margin-top: 0.25rem;">Current Photo</div>
+                </div>
+            {% endif %}
+            
+            <div class="dropzone-box" id="uploadDropzone">
+                <input type="file" id="imageInput" name="image" accept="image/png, image/jpeg, image/webp">
+                <div style="font-weight: 700; color: #ffffff;">Click to choose new photo, or drag here</div>
+            </div>
+            
+            <div class="preview-container" id="previewWrapper">
+                <img id="previewImg" src="" alt="Preview">
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+            <button type="submit" class="btn btn-primary" style="flex: 1; padding: 0.85rem;">
+                Save Changes &amp; Recompute AI Vectors
+            </button>
+            <a href="{{ url_for('item_details', item_id=item.id) }}" class="btn btn-secondary">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

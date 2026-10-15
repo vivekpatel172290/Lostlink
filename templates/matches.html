@@ -1,0 +1,221 @@
+{% extends 'base.html' %}
+
+{% block title %}AI Match Results for #{{ target_item.id }} - LostLink{% endblock %}
+
+{% block content %}
+<div style="margin: 2rem 0;">
+    <!-- Matches Header Strip -->
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem;">
+        <div>
+            <div class="cyber-pill-live" style="margin-bottom: 0.5rem;">
+                <span class="pulse-indicator"></span>
+                CLIP MULTIMODAL SIMILARITY ENGINE
+            </div>
+            <h1 style="font-size: 2.2rem; font-weight: 800; color: #ffffff;">
+                AI Matches for: {{ target_item.title }}
+            </h1>
+            <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 0.35rem;">
+                Scanned against all active <strong>{{ opposite_type.capitalize() }}</strong> reports using 512-dim unit-normalized visual and text vectors.
+            </p>
+        </div>
+
+        <div>
+            <a href="{{ url_for('item_details', item_id=target_item.id) }}" class="btn btn-secondary">
+                View Original Post ↗
+            </a>
+        </div>
+    </div>
+
+    <!-- 1. Prominent Top Match Side-by-Side (PDF 2 Page 4 Layout) -->
+    {% if best_match %}
+        {% set best_item = best_match.item %}
+        <div class="match-hero-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <div style="font-family: var(--font-mono); font-size: 0.85rem; font-weight: 700; color: var(--cyber-cyan); text-transform: uppercase;">
+                    // TOP AI CANDIDATE MATCH
+                </div>
+                <span class="badge badge-confidence" style="font-size: 0.85rem; padding: 0.35rem 0.75rem;">
+                    {{ best_match.percentage }}% SIMILARITY
+                </span>
+            </div>
+
+            <!-- Side by Side Comparison Layout -->
+            <div class="match-side-by-side">
+                <!-- Left: Target Item -->
+                <div class="match-compare-box">
+                    {% if target_item.image_path %}
+                        <img src="{{ url_for('uploaded_file', filename=target_item.image_path) }}" alt="{{ target_item.title }}" class="match-compare-img">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='images/default-item.svg') }}" alt="No photo" class="match-compare-img">
+                    {% endif %}
+                    <div>
+                        <div style="margin-bottom: 0.3rem;">
+                            {% if target_item.is_lost() %}
+                                <span class="badge badge-lost">● Your Lost Item</span>
+                            {% else %}
+                                <span class="badge badge-found">● Your Found Item</span>
+                            {% endif %}
+                        </div>
+                        <h3 style="font-size: 1.15rem; font-weight: 700; color: #ffffff;">{{ target_item.title }}</h3>
+                        <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.2rem;">
+                            📁 {{ target_item.category }} &bull; 📍 {{ target_item.location }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Center: Match Dial & Direction Arrow -->
+                <div class="match-center-dial">
+                    <div class="match-dial-percent">{{ best_match.percentage }}%</div>
+                    <div class="match-dial-sub">
+                        {% if best_match.match_type == 'image' %}
+                            📷 Vision Match
+                        {% else %}
+                            📝 Text Match
+                        {% endif %}
+                    </div>
+                    <div style="font-size: 1.5rem; color: var(--cyber-cyan); margin-top: 0.25rem;">➔</div>
+                </div>
+
+                <!-- Right: Matched Item -->
+                <div class="match-compare-box">
+                    {% if best_item.image_path %}
+                        <img src="{{ url_for('uploaded_file', filename=best_item.image_path) }}" alt="{{ best_item.title }}" class="match-compare-img">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='images/default-item.svg') }}" alt="No photo" class="match-compare-img">
+                    {% endif %}
+                    <div>
+                        <div style="margin-bottom: 0.3rem;">
+                            {% if best_item.is_lost() %}
+                                <span class="badge badge-lost">● Matched Lost</span>
+                            {% else %}
+                                <span class="badge badge-found">● Matched Found</span>
+                            {% endif %}
+                        </div>
+                        <h3 style="font-size: 1.15rem; font-weight: 700; color: #ffffff;">{{ best_item.title }}</h3>
+                        <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.2rem;">
+                            📁 {{ best_item.category }} &bull; 📍 {{ best_item.location }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Glowing Confidence Progress Bar -->
+            <div class="confidence-bar-wrap">
+                <div class="confidence-bar-fill" style="width: {{ best_match.percentage }}%;"></div>
+            </div>
+
+            <!-- Action Controls per PDF Specification -->
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-top: 1.5rem;">
+                <div style="display: flex; gap: 0.75rem;">
+                    <a href="{{ url_for('item_details', item_id=best_item.id) }}" class="btn btn-primary btn-sm">
+                        View Matched Item Details ↗
+                    </a>
+
+                    <!-- Confirm Match Button (PDF Spec #25) -->
+                    {% if target_item.status != 'matched' and best_item.status != 'matched' %}
+                        <form method="POST" action="{{ url_for('confirm_match', item_id=target_item.id, match_id=best_item.id) }}" style="display: inline;">
+                            <button type="submit" class="btn btn-found btn-sm" onclick="return confirm('Confirm this match? Both items will be marked as Matched.');">
+                                ✓ Confirm Match
+                            </button>
+                        </form>
+                    {% else %}
+                        <span class="badge badge-matched" style="font-size: 0.85rem; padding: 0.45rem 0.85rem;">
+                            ✓ Confirmed Match
+                        </span>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <a href="{{ url_for('index') }}" class="btn btn-secondary btn-sm" style="color: var(--text-muted);">
+                        Not a Match
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- 2. Other Possible Matches Cards (PDF 2 Page 4) -->
+    {% if other_matches %}
+        <div style="margin-top: 3rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                <h2 style="font-size: 1.35rem; font-weight: 800; color: #ffffff;">
+                    Other Potential AI Matches
+                    <span style="font-size: 0.85rem; font-family: var(--font-mono); color: var(--text-muted); margin-left: 0.5rem;">
+                        ({{ other_matches|length }} candidates)
+                    </span>
+                </h2>
+            </div>
+
+            <div class="items-grid">
+                {% for m in other_matches %}
+                    {% set cand = m.item %}
+                    <div class="item-card" onclick="if(!event.target.closest('a, button, input')) window.location.href='{{ url_for('item_details', item_id=cand.id) }}'">
+                        <!-- Entire Card Clickable Overlay Link -->
+                        <a href="{{ url_for('item_details', item_id=cand.id) }}" class="card-clickable-overlay" aria-label="View {{ cand.title }} details"></a>
+                        <div class="card-img-wrap">
+                            {% if cand.image_path %}
+                                <img src="{{ url_for('uploaded_file', filename=cand.image_path) }}" alt="{{ cand.title }}" class="card-img">
+                            {% else %}
+                                <img src="{{ url_for('static', filename='images/default-item.svg') }}" alt="No photo" class="card-img">
+                            {% endif %}
+
+                            <div class="card-badge-floating">
+                                {% if cand.is_lost() %}
+                                    <span class="badge badge-lost">● Lost</span>
+                                {% else %}
+                                    <span class="badge badge-found">● Found</span>
+                                {% endif %}
+                            </div>
+
+                            <div class="card-status-floating">
+                                <span class="badge badge-confidence">{{ m.percentage }}% Match</span>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <h3 class="card-title">{{ cand.title }}</h3>
+                            <div class="card-meta">
+                                <span>📁 {{ cand.category }}</span>
+                                <span>&bull;</span>
+                                <span>📍 {{ cand.location }}</span>
+                            </div>
+                            <p class="card-desc">{{ cand.description }}</p>
+
+                            <div class="card-footer">
+                                <span class="card-time">🕒 {{ cand.time_ago }}</span>
+                                <div style="display: flex; gap: 0.4rem;">
+                                    <a href="{{ url_for('item_details', item_id=cand.id) }}" class="btn btn-secondary btn-sm">
+                                        View Item ↗
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
+    {% if not matches %}
+        <!-- Empty State -->
+        <div style="text-align: center; padding: 4.5rem 1.5rem; background: var(--bg-card); border: 1px dashed var(--border-hairline); border-radius: var(--radius-xl); margin-bottom: 3rem;">
+            <div style="font-size: 3rem; margin-bottom: 0.75rem;">⚡</div>
+            <h3 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 0.5rem; color: #ffffff;">No close matches yet</h3>
+            <p style="color: var(--text-muted); max-width: 500px; margin: 0 auto 1.5rem; line-height: 1.6;">
+                No active <strong>{{ opposite_type.capitalize() }}</strong> report currently exceeds the 25% similarity threshold. 
+                Your report is published on the campus feed, and future posts will be continuously cross-matched automatically!
+            </p>
+            <div style="display: flex; justify-content: center; gap: 0.75rem;">
+                <a href="{{ url_for('index') }}" class="btn btn-secondary btn-sm">Explore Board</a>
+                <a href="{{ url_for('post_item') }}" class="btn btn-primary btn-sm">+ Post Another Item ↗</a>
+            </div>
+        </div>
+    {% endif %}
+
+    <div style="text-align: center; margin-top: 3rem;">
+        <a href="{{ url_for('index') }}" class="btn btn-secondary">
+            &larr; Back to Live Campus Feed
+        </a>
+    </div>
+</div>
+{% endblock %}

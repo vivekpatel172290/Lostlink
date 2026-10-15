@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Student Login - LostLink{% endblock %}
+
+{% block content %}
+<div class="form-card" style="max-width: 440px; margin: 3rem auto;">
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <div class="brand-icon-box" style="margin: 0 auto 1rem; width: 48px; height: 48px; font-size: 1.5rem;">
+            ⚡
+        </div>
+        <h1 style="font-size: 1.85rem; font-weight: 800; color: #ffffff;">
+            Sign in to LostLink
+        </h1>
+        <p style="color: var(--text-muted); font-size: 0.88rem; margin-top: 0.35rem;">
+            Access your campus reports, monitor AI matches, and claim found items.
+        </p>
+    </div>
+
+    <form method="POST" action="{{ url_for('login') }}">
+        <div class="form-group">
+            <label class="form-label" for="email">College Email Address *</label>
+            <input type="email" id="email" name="email" class="form-control" 
+                   placeholder="student@campus.edu" required autofocus>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="password">Password *</label>
+            <input type="password" id="password" name="password" class="form-control" 
+                   placeholder="••••••••" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 0.85rem; margin-top: 1rem;">
+            Sign In ↗
+        </button>
+
+        <div style="text-align: center; margin-top: 1.5rem; font-size: 0.88rem; color: var(--text-secondary);">
+            New student? <a href="{{ url_for('signup') }}" style="color: var(--cyber-cyan); text-decoration: none; font-weight: 700;">Create an account</a>
+        </div>
+    </form>
+
+    <!-- Demo Credentials Hint Box for convenience -->
+    <div style="margin-top: 2rem; background: rgba(56, 189, 248, 0.05); border: 1px dashed rgba(56, 189, 248, 0.25); border-radius: var(--radius-md); padding: 0.85rem 1rem; font-size: 0.78rem; font-family: var(--font-mono); color: var(--text-muted);">
+        <strong style="color: var(--cyber-cyan);">Demo Accounts:</strong><br>
+        Student: <code style="color: #ffffff;">student@campus.edu</code> / <code style="color: #ffffff;">Student@123</code><br>
+        Admin: <code style="color: #ffffff;">admin@campus.edu</code> / <code style="color: #ffffff;">Admin@123</code>
+    </div>
+</div>
+{% endblock %}

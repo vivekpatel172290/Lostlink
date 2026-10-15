@@ -1,0 +1,290 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Moderation Dashboard - LostLink{% endblock %}
+
+{% block content %}
+<div style="margin: 2rem 0;">
+    <!-- Dashboard Header -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <div style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--cyber-cyan); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.35rem;">
+                // CAMPUS MODERATION &amp; AUDIT CONSOLE
+            </div>
+            <h1 style="font-size: 2.2rem; font-weight: 800; color: #ffffff;">
+                Admin Control Center
+            </h1>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">
+                Review student reports, approve ownership claims, and moderate spam flags across the campus network.
+            </p>
+        </div>
+
+        <div style="display: flex; gap: 0.75rem;">
+            <a href="{{ url_for('post_item') }}" class="btn btn-primary btn-sm">
+                + Post Report ↗
+            </a>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary btn-sm">
+                View Public Board
+            </a>
+        </div>
+    </div>
+
+    <!-- Admin Metric Cards per PDF 2 page 6 -->
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2.5rem;">
+        <div class="hero-stat-card">
+            <div class="hero-stat-num">{{ total_items }}</div>
+            <div class="hero-stat-label">Total Submissions</div>
+        </div>
+        <div class="hero-stat-card lost">
+            <div class="hero-stat-num">{{ open_items }}</div>
+            <div class="hero-stat-label">Active Open</div>
+        </div>
+        <div class="hero-stat-card found">
+            <div class="hero-stat-num">{{ resolved_items }}</div>
+            <div class="hero-stat-label">Reunited Items</div>
+        </div>
+        <div class="hero-stat-card reunited">
+            <div class="hero-stat-num">{{ pending_claims }}</div>
+            <div class="hero-stat-label">Pending Claims</div>
+        </div>
+    </div>
+
+    <!-- Tabs Header per PDF 2 page 6 -->
+    <div class="admin-tabs">
+        <button type="button" class="admin-tab-btn active" onclick="switchAdminTab('items', event)">
+            Items Catalog ({{ items|length }})
+        </button>
+        <button type="button" class="admin-tab-btn" onclick="switchAdminTab('claims', event)">
+            Claims Queue ({{ claims|length }})
+        </button>
+        <button type="button" class="admin-tab-btn" onclick="switchAdminTab('flags', event)">
+            Flagged Queue ({{ flags|length }})
+        </button>
+    </div>
+
+    <!-- TAB 1: Items Catalog Table -->
+    <div class="admin-tab-panel" id="panel-items">
+        <div class="admin-table-wrap">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="width: 70px;">ID</th>
+                        <th style="width: 85px;">Type</th>
+                        <th style="width: 70px;">Photo</th>
+                        <th>Title &amp; Category</th>
+                        <th>Location</th>
+                        <th>Reporter Contact</th>
+                        <th style="width: 100px;">Status</th>
+                        <th style="width: 110px;">Date</th>
+                        <th style="width: 190px; text-align: right;">Moderation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if items %}
+                        {% for item in items %}
+                            <tr>
+                                <td><span style="font-family: var(--font-mono); color: var(--cyber-cyan); font-weight: 700;">#{{ item.id }}</span></td>
+                                <td>
+                                    {% if item.is_lost() %}
+                                        <span class="badge badge-lost">Lost</span>
+                                    {% else %}
+                                        <span class="badge badge-found">Found</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if item.image_path %}
+                                        <img src="{{ url_for('uploaded_file', filename=item.image_path) }}" 
+                                             alt="{{ item.title }}" 
+                                             style="width: 44px; height: 44px; border-radius: var(--radius-sm); object-fit: cover; border: 1px solid var(--border-hairline);">
+                                    {% else %}
+                                        <span style="font-size: 1.35rem;" title="No photo">⚡</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('item_details', item_id=item.id) }}" style="font-weight: 700; color: #ffffff; text-decoration: none;">
+                                        {{ item.title }}
+                                    </a>
+                                    <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;">
+                                        📁 {{ item.category }}
+                                    </div>
+                                </td>
+                                <td style="color: var(--text-secondary);">📍 {{ item.location }}</td>
+                                <td>
+                                    <span style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-muted);">{{ item.contact }}</span>
+                                </td>
+                                <td>
+                                    {% if item.is_resolved() %}
+                                        <span class="badge badge-resolved">Resolved</span>
+                                    {% elif item.is_matched() %}
+                                        <span class="badge badge-matched">Matched</span>
+                                    {% else %}
+                                        <span class="badge badge-found">Active</span>
+                                    {% endif %}
+                                </td>
+                                <td style="font-size: 0.82rem; font-family: var(--font-mono); color: var(--text-dim);">
+                                    {{ item.created_at.strftime('%Y-%m-%d') if item.created_at else 'N/A' }}
+                                </td>
+                                <td style="text-align: right;">
+                                    <div style="display: inline-flex; gap: 0.35rem;">
+                                        <form method="POST" action="{{ url_for('admin_toggle_status', item_id=item.id) }}" style="display: inline;">
+                                            <button type="submit" class="btn btn-secondary btn-sm" title="Toggle Open/Resolved" style="padding: 0.3rem 0.6rem; font-size: 0.78rem;">
+                                                {% if item.is_resolved() %}Reopen{% else %}Resolve{% endif %}
+                                            </button>
+                                        </form>
+
+                                        <form method="POST" action="{{ url_for('admin_delete', item_id=item.id) }}" 
+                                              onsubmit="return confirm('Permanently delete item #{{ item.id }}?');" style="display: inline;">
+                                            <button type="submit" class="btn btn-lost btn-sm" style="padding: 0.3rem 0.6rem; font-size: 0.78rem;">
+                                                Delete
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="9" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                                No records found in the system database.
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- TAB 2: Claims Queue Table per PDF Spec #23, #24, #28 -->
+    <div class="admin-tab-panel" id="panel-claims" style="display: none;">
+        <div class="admin-table-wrap">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="width: 70px;">Claim ID</th>
+                        <th style="width: 90px;">Item Ref</th>
+                        <th>Claimant Name &amp; Contact</th>
+                        <th>Ownership Proof Details</th>
+                        <th style="width: 100px;">Status</th>
+                        <th style="width: 110px;">Date</th>
+                        <th style="width: 170px; text-align: right;">Review Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if claims %}
+                        {% for c in claims %}
+                            <tr>
+                                <td><span style="font-family: var(--font-mono); color: var(--cyber-cyan); font-weight: 700;">#{{ c.id }}</span></td>
+                                <td>
+                                    <a href="{{ url_for('item_details', item_id=c.item_id) }}" style="color: var(--cyber-cyan); font-weight: 700; text-decoration: none;">
+                                        Item #{{ c.item_id }}
+                                    </a>
+                                </td>
+                                <td>
+                                    <strong style="color: #ffffff;">{{ c.claimant_name }}</strong>
+                                    <div style="font-size: 0.8rem; font-family: var(--font-mono); color: var(--text-muted);">{{ c.claimant_contact }}</div>
+                                </td>
+                                <td style="max-width: 320px; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+                                    {{ c.proof_description }}
+                                </td>
+                                <td>
+                                    {% if c.status == 'approved' %}
+                                        <span class="badge badge-found">Approved</span>
+                                    {% elif c.status == 'rejected' %}
+                                        <span class="badge badge-lost">Rejected</span>
+                                    {% else %}
+                                        <span class="badge badge-confidence">Pending</span>
+                                    {% endif %}
+                                </td>
+                                <td style="font-size: 0.82rem; font-family: var(--font-mono); color: var(--text-dim);">
+                                    {{ c.created_at.strftime('%Y-%m-%d') if c.created_at else 'N/A' }}
+                                </td>
+                                <td style="text-align: right;">
+                                    {% if c.status == 'pending' %}
+                                        <form method="POST" action="{{ url_for('admin_claim_action', claim_id=c.id, action='approve') }}" style="display: inline;">
+                                            <button type="submit" class="btn btn-found btn-sm" style="padding: 0.3rem 0.6rem; font-size: 0.78rem;">
+                                                ✓ Approve
+                                            </button>
+                                        </form>
+                                        <form method="POST" action="{{ url_for('admin_claim_action', claim_id=c.id, action='reject') }}" style="display: inline;">
+                                            <button type="submit" class="btn btn-lost btn-sm" style="padding: 0.3rem 0.6rem; font-size: 0.78rem;">
+                                                ✕ Reject
+                                            </button>
+                                        </form>
+                                    {% else %}
+                                        <span style="font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-mono);">Reviewed</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="7" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                                No pending ownership claims to review.
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- TAB 3: Flagged Queue Table per PDF Spec #29, #30 -->
+    <div class="admin-tab-panel" id="panel-flags" style="display: none;">
+        <div class="admin-table-wrap">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="width: 70px;">Flag ID</th>
+                        <th style="width: 90px;">Item Ref</th>
+                        <th>Flag Reason</th>
+                        <th>Flagged By</th>
+                        <th style="width: 110px;">Date</th>
+                        <th style="width: 170px; text-align: right;">Moderation Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if flags %}
+                        {% for f in flags %}
+                            <tr>
+                                <td><span style="font-family: var(--font-mono); color: var(--lost-red); font-weight: 700;">#{{ f.id }}</span></td>
+                                <td>
+                                    <a href="{{ url_for('item_details', item_id=f.item_id) }}" style="color: var(--cyber-cyan); font-weight: 700; text-decoration: none;">
+                                        Item #{{ f.item_id }}
+                                    </a>
+                                </td>
+                                <td style="color: #ffffff; font-weight: 600;">
+                                    {{ f.reason }}
+                                </td>
+                                <td style="color: var(--text-muted); font-size: 0.85rem;">
+                                    {{ f.reported_by }}
+                                </td>
+                                <td style="font-size: 0.82rem; font-family: var(--font-mono); color: var(--text-dim);">
+                                    {{ f.created_at.strftime('%Y-%m-%d') if f.created_at else 'N/A' }}
+                                </td>
+                                <td style="text-align: right;">
+                                    <form method="POST" action="{{ url_for('admin_flag_dismiss', flag_id=f.id) }}" style="display: inline;">
+                                        <button type="submit" class="btn btn-secondary btn-sm" style="padding: 0.3rem 0.6rem; font-size: 0.78rem;">
+                                            Dismiss Flag
+                                        </button>
+                                    </form>
+                                    <form method="POST" action="{{ url_for('admin_delete', item_id=f.item_id) }}" 
+                                          onsubmit="return confirm('Delete reported post #{{ f.item_id }}?');" style="display: inline;">
+                                        <button type="submit" class="btn btn-lost btn-sm" style="padding: 0.3rem 0.6rem; font-size: 0.78rem;">
+                                            Delete Post
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                                No flagged posts in the moderation queue.
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

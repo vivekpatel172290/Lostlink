@@ -1,0 +1,313 @@
+{% extends 'base.html' %}
+
+{% block title %}LostLink - AI-Powered Campus Lost &amp; Found{% endblock %}
+
+{% block content %}
+<!-- Coder Army Cyber Hero Section -->
+<section class="hero-section">
+    <!-- Hero Left: Dynamic Headline & CTAs -->
+    <div class="hero-left">
+        <div class="cyber-pill-live">
+            <span class="pulse-indicator"></span>
+            NEURAL MULTIMODAL MATCHING ACTIVE
+        </div>
+
+        <h1 class="hero-title">
+            Connect What's Lost.<br>
+            <span class="gradient-text txt-rotate-wrap">
+                <span class="txt-rotate" 
+                      data-period="1800" 
+                      data-rotate='[ "Earphones", "ID Cards", "Laptops", "Backpacks", "Phones", "Keys" ]'>
+                </span>
+            </span>
+        </h1>
+
+        <p class="hero-subtitle">
+            LostLink uses OpenAI CLIP ViT-B-32 multimodal AI to cross-analyze visual features and text vectors in real-time, connecting students who lost items with finders across university grounds.
+        </p>
+
+        <!-- Primary Action CTAs -->
+        <div class="hero-ctas">
+            <a href="{{ url_for('post_item') }}?type=lost" class="btn btn-lost">
+                <span>🔴</span> Report Lost Item ↗
+            </a>
+            <a href="{{ url_for('post_item') }}?type=found" class="btn btn-found">
+                <span>🟢</span> Report Found Item ↗
+            </a>
+            <a href="#feed-section" class="btn btn-secondary">
+                <span>🔍</span> Browse Feed
+            </a>
+        </div>
+
+        <!-- Live Campus Statistics Row -->
+        <div class="hero-stats-row">
+            <div class="hero-stat-card lost">
+                <div class="hero-stat-num">{{ total_open_lost }}</div>
+                <div class="hero-stat-label">Active Lost</div>
+            </div>
+            <div class="hero-stat-card found">
+                <div class="hero-stat-num">{{ total_open_found }}</div>
+                <div class="hero-stat-label">Active Found</div>
+            </div>
+            <div class="hero-stat-card reunited">
+                <div class="hero-stat-num">{{ total_resolved }}</div>
+                <div class="hero-stat-label">Reunited Items</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Right: Continuous Upward Auto-Scrolling Lost & Found Showcase Box (Coder Army Glow Border) -->
+    <div class="hero-right">
+        <div class="glow-border-box showcase-glow-box">
+            <div class="showcase-wrapper">
+            <div class="showcase-header">
+                <div class="showcase-header-title">
+                    <span style="font-size: 1rem;">⚡</span> LIVE CAMPUS RADAR
+                </div>
+                <div class="showcase-badge">
+                    AUTO-MATCHING FEED
+                </div>
+            </div>
+
+            <!-- Auto-scrolling Ticker Viewport -->
+            <div class="ticker-viewport">
+                <div class="ticker-track">
+                    <!-- Set 1 of items for seamless loop -->
+                    {% for item in showcase_items %}
+                        <a href="{{ url_for('item_details', item_id=item.id) }}" class="ticker-card">
+                            {% if item.image_path %}
+                                <img src="{{ url_for('uploaded_file', filename=item.image_path) }}" alt="{{ item.title }}" class="ticker-img">
+                            {% else %}
+                                <img src="{{ url_for('static', filename='images/default-item.svg') }}" alt="No photo" class="ticker-img">
+                            {% endif %}
+
+                            <div class="ticker-info">
+                                <div class="ticker-top-meta">
+                                    {% if item.is_lost() %}
+                                        <span class="badge badge-lost">● Lost</span>
+                                    {% else %}
+                                        <span class="badge badge-found">● Found</span>
+                                    {% endif %}
+                                    <span style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono);">{{ item.category }}</span>
+                                    {% if item.is_matched() %}
+                                        <span class="badge badge-matched" style="font-size: 0.65rem;">Matched</span>
+                                    {% endif %}
+                                </div>
+                                <div class="ticker-title">{{ item.title }}</div>
+                                <div class="ticker-sub">
+                                    <span>📍 {{ item.location }}</span>
+                                    <span>&bull;</span>
+                                    <span class="ticker-phone">📞 {{ item.contact }}</span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <span class="badge badge-confidence">AI Match</span>
+                            </div>
+                        </a>
+                    {% endfor %}
+
+                    <!-- Duplicate loop for seamless continuous scrolling -->
+                    {% for item in showcase_items %}
+                        <a href="{{ url_for('item_details', item_id=item.id) }}" class="ticker-card">
+                            {% if item.image_path %}
+                                <img src="{{ url_for('uploaded_file', filename=item.image_path) }}" alt="{{ item.title }}" class="ticker-img">
+                            {% else %}
+                                <img src="{{ url_for('static', filename='images/default-item.svg') }}" alt="No photo" class="ticker-img">
+                            {% endif %}
+
+                            <div class="ticker-info">
+                                <div class="ticker-top-meta">
+                                    {% if item.is_lost() %}
+                                        <span class="badge badge-lost">● Lost</span>
+                                    {% else %}
+                                        <span class="badge badge-found">● Found</span>
+                                    {% endif %}
+                                    <span style="font-size: 0.72rem; color: var(--text-muted); font-family: var(--font-mono);">{{ item.category }}</span>
+                                </div>
+                                <div class="ticker-title">{{ item.title }}</div>
+                                <div class="ticker-sub">
+                                    <span>📍 {{ item.location }}</span>
+                                    <span>&bull;</span>
+                                    <span class="ticker-phone">📞 {{ item.contact }}</span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <span class="badge badge-confidence">AI Match</span>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</section>
+
+<!-- Filter & Search Toolbar (Section 7 & 8) -->
+<section id="feed-section" class="filter-card">
+    <form method="GET" action="{{ url_for('index') }}" class="filter-form">
+        <!-- Top Row: Segmented Pills & Search Input -->
+        <div class="filter-top-row">
+            <div class="type-toggle-group">
+                <a href="{{ url_for('index', item_type='', category=category, location=location, date_sort=date_sort, q=search_query, status=status_filter) }}" 
+                   class="type-toggle-btn {% if not item_type %}active-all{% endif %}">
+                   All Reports
+                </a>
+                <a href="{{ url_for('index', item_type='lost', category=category, location=location, date_sort=date_sort, q=search_query, status=status_filter) }}" 
+                   class="type-toggle-btn {% if item_type == 'lost' %}active-lost{% endif %}">
+                   ● Lost Only
+                </a>
+                <a href="{{ url_for('index', item_type='found', category=category, location=location, date_sort=date_sort, q=search_query, status=status_filter) }}" 
+                   class="type-toggle-btn {% if item_type == 'found' %}active-found{% endif %}">
+                   ● Found Only
+                </a>
+            </div>
+
+            <div class="search-input-group">
+                <span class="search-icon">🔍</span>
+                <input type="text" name="q" value="{{ search_query }}" placeholder="Search by title, description, category, or location..." />
+            </div>
+        </div>
+
+        <input type="hidden" name="item_type" value="{{ item_type }}">
+
+        <!-- Bottom Row: Category, Location, Status, Date Sort -->
+        <div class="filter-bottom-row">
+            <select name="category" class="filter-select" onchange="this.form.submit()">
+                <option value="">All Categories</option>
+                {% for cat in all_categories %}
+                    <option value="{{ cat }}" {% if category == cat %}selected{% endif %}>{{ cat }}</option>
+                {% endfor %}
+            </select>
+
+            <select name="location" class="filter-select" onchange="this.form.submit()">
+                <option value="">All Locations</option>
+                {% for loc in all_locations %}
+                    <option value="{{ loc }}" {% if location == loc %}selected{% endif %}>{{ loc }}</option>
+                {% endfor %}
+            </select>
+
+            <select name="status" class="filter-select" onchange="this.form.submit()">
+                <option value="open" {% if status_filter == 'open' %}selected{% endif %}>Status: Open Only</option>
+                <option value="matched" {% if status_filter == 'matched' %}selected{% endif %}>Status: Matched</option>
+                <option value="resolved" {% if status_filter == 'resolved' %}selected{% endif %}>Status: Resolved</option>
+                <option value="all" {% if status_filter == 'all' %}selected{% endif %}>Status: All Statuses</option>
+            </select>
+
+            <select name="date_sort" class="filter-select" onchange="this.form.submit()">
+                <option value="newest" {% if date_sort == 'newest' %}selected{% endif %}>Sort: Newest First</option>
+                <option value="oldest" {% if date_sort == 'oldest' %}selected{% endif %}>Sort: Oldest First</option>
+            </select>
+
+            <button type="submit" class="btn btn-secondary btn-sm">Filter</button>
+            {% if search_query or category or location or item_type or status_filter != 'open' %}
+                <a href="{{ url_for('index') }}" class="btn btn-outline btn-sm">Reset</a>
+            {% endif %}
+        </div>
+    </form>
+</section>
+
+<!-- Item Feed Grid -->
+<section style="margin-bottom: 3.5rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h2 style="font-size: 1.45rem; font-weight: 800; color: #ffffff;">
+            {% if item_type == 'lost' %}
+                Lost Items Feed
+            {% elif item_type == 'found' %}
+                Found Items Feed
+            {% else %}
+                Live Campus Feed
+            {% endif %}
+            <span style="font-size: 0.88rem; font-family: var(--font-mono); font-weight: 500; color: var(--text-muted); margin-left: 0.5rem;">
+                ({{ items|length }} listings)
+            </span>
+        </h2>
+    </div>
+
+    {% if items %}
+        <div class="items-grid">
+            {% for item in items %}
+                <div class="item-card" onclick="if(!event.target.closest('a, button, input')) window.location.href='{{ url_for('item_details', item_id=item.id) }}'">
+                    <!-- Entire Card Clickable Overlay Link -->
+                    <a href="{{ url_for('item_details', item_id=item.id) }}" class="card-clickable-overlay" aria-label="View {{ item.title }} details"></a>
+
+                    <!-- Photo Display -->
+                    <div class="card-img-wrap">
+                        {% if item.image_path %}
+                            <img src="{{ url_for('uploaded_file', filename=item.image_path) }}" alt="{{ item.title }}" class="card-img" loading="lazy">
+                        {% else %}
+                            <img src="{{ url_for('static', filename='images/default-item.svg') }}" alt="No photo" class="card-img">
+                        {% endif %}
+
+                        <!-- Floating Badges -->
+                        <div class="card-badge-floating">
+                            {% if item.is_lost() %}
+                                <span class="badge badge-lost">● Lost</span>
+                            {% else %}
+                                <span class="badge badge-found">● Found</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="card-status-floating">
+                            {% if item.is_resolved() %}
+                                <span class="badge badge-resolved">✓ Resolved</span>
+                            {% elif item.is_matched() %}
+                                <span class="badge badge-matched">⚡ Matched</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <h3 class="card-title">{{ item.title }}</h3>
+                        
+                        <div class="card-meta">
+                            <span>📁 {{ item.category }}</span>
+                            <span>&bull;</span>
+                            <span>📍 {{ item.location }}</span>
+                        </div>
+
+                        <p class="card-desc">{{ item.description }}</p>
+
+                        <!-- Reporter Contact Details / Phone Number -->
+                        <div class="card-contact-row">
+                            <a href="tel:{{ item.phone_digits }}" class="card-phone-btn" title="Call Reporter directly">
+                                <span>📞</span> {{ item.contact }}
+                            </a>
+                            {% if item.phone_digits %}
+                                <a href="https://wa.me/{{ item.phone_digits }}" target="_blank" rel="noopener" class="card-wa-btn" title="Chat on WhatsApp">
+                                    <span>💬</span> WhatsApp
+                                </a>
+                            {% endif %}
+                        </div>
+
+                        <div class="card-footer">
+                            <span class="card-time">🕒 {{ item.time_ago }}</span>
+                            <div style="display: flex; gap: 0.4rem;">
+                                <a href="{{ url_for('matches', item_id=item.id) }}" class="btn btn-purple btn-sm" title="Run AI Multimodal Matcher">
+                                    ⚡ Matches
+                                </a>
+                                <a href="{{ url_for('item_details', item_id=item.id) }}" class="btn btn-secondary btn-sm">
+                                    Details ↗
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <!-- Empty Feed State -->
+        <div style="text-align: center; padding: 4.5rem 1.5rem; background: var(--bg-card); border: 1px dashed var(--border-hairline); border-radius: var(--radius-xl);">
+            <div style="font-size: 3rem; margin-bottom: 0.75rem;">🔍</div>
+            <h3 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 0.5rem; color: #ffffff;">No items found</h3>
+            <p style="color: var(--text-muted); max-width: 480px; margin: 0 auto 1.5rem;">
+                No campus reports match your selected criteria. Try adjusting keywords or resetting the filter parameters.
+            </p>
+            <a href="{{ url_for('index') }}" class="btn btn-primary btn-sm">View All Listings ↗</a>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

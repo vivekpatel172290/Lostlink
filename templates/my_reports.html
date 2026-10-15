@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block title %}My Reports - LostLink{% endblock %}
+
+{% block content %}
+<div style="margin: 2rem 0;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <div style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--cyber-cyan); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.35rem;">
+                // STUDENT REPORT DASHBOARD
+            </div>
+            <h1 style="font-size: 2.2rem; font-weight: 800; color: #ffffff;">
+                My Reported Items
+            </h1>
+            <p style="color: var(--text-muted); font-size: 0.95rem;">
+                Manage your posted lost &amp; found items, monitor AI matches, and update claim statuses.
+            </p>
+        </div>
+
+        <a href="{{ url_for('post_item') }}" class="btn btn-primary btn-sm">
+            <span>+</span> Post New Item ↗
+        </a>
+    </div>
+
+    <!-- Segmented Status Tabs per PDF 2 page 5 -->
+    <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+        <a href="{{ url_for('my_reports', status='all') }}" 
+           class="btn btn-sm {% if status_filter == 'all' or not status_filter %}btn-primary{% else %}btn-secondary{% endif %}">
+           All Reports ({{ items|length }})
+        </a>
+        <a href="{{ url_for('my_reports', status='lost') }}" 
+           class="btn btn-sm {% if status_filter == 'lost' %}btn-lost{% else %}btn-secondary{% endif %}">
+           ● Lost Items
+        </a>
+        <a href="{{ url_for('my_reports', status='found') }}" 
+           class="btn btn-sm {% if status_filter == 'found' %}btn-found{% else %}btn-secondary{% endif %}">
+           ● Found Items
+        </a>
+        <a href="{{ url_for('my_reports', status='resolved') }}" 
+           class="btn btn-sm {% if status_filter == 'resolved' %}btn-primary{% else %}btn-secondary{% endif %}">
+           ✓ Resolved Items
+        </a>
+    </div>
+
+    <!-- Horizontal List Rows per PDF 2 page 5 -->
+    {% if items %}
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+            {% for item in items %}
+                <div style="background: var(--bg-card); border: var(--border-card); border-radius: var(--radius-lg); padding: 1.25rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1.25rem; backdrop-filter: blur(12px);">
+                    <!-- Left: Thumbnail & Details -->
+                    <div style="display: flex; align-items: center; gap: 1.25rem;">
+                        {% if item.image_path %}
+                            <img src="{{ url_for('uploaded_file', filename=item.image_path) }}" alt="{{ item.title }}" 
+                                 style="width: 72px; height: 72px; border-radius: var(--radius-md); object-fit: cover; border: 1px solid var(--border-hairline);">
+                        {% else %}
+                            <img src="{{ url_for('static', filename='images/default-item.svg') }}" alt="No photo" 
+                                 style="width: 72px; height: 72px; border-radius: var(--radius-md); object-fit: cover; border: 1px solid var(--border-hairline);">
+                        {% endif %}
+
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem;">
+                                {% if item.is_lost() %}
+                                    <span class="badge badge-lost">● Lost</span>
+                                {% else %}
+                                    <span class="badge badge-found">● Found</span>
+                                {% endif %}
+
+                                {% if item.is_resolved() %}
+                                    <span class="badge badge-resolved">✓ Resolved</span>
+                                {% elif item.is_matched() %}
+                                    <span class="badge badge-matched">⚡ Matched</span>
+                                {% else %}
+                                    <span class="badge" style="background: rgba(56, 189, 248, 0.1); color: var(--cyber-cyan);">Active</span>
+                                {% endif %}
+                                <span style="font-size: 0.8rem; font-family: var(--font-mono); color: var(--text-dim);">#{{ item.id }}</span>
+                            </div>
+
+                            <h3 style="font-size: 1.15rem; font-weight: 700; color: #ffffff; margin-bottom: 0.25rem;">
+                                {{ item.title }}
+                            </h3>
+
+                            <div style="font-size: 0.82rem; color: var(--text-muted); display: flex; gap: 0.75rem; align-items: center;">
+                                <span>📁 {{ item.category }}</span>
+                                <span>&bull;</span>
+                                <span>📍 {{ item.location }}</span>
+                                <span>&bull;</span>
+                                <span>🕒 {{ item.time_ago }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Action Buttons (View, Matches, Edit, Resolve, Delete) -->
+                    <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+                        <a href="{{ url_for('matches', item_id=item.id) }}" class="btn btn-purple btn-sm">
+                            ⚡ AI Matches
+                        </a>
+                        <a href="{{ url_for('item_details', item_id=item.id) }}" class="btn btn-secondary btn-sm">
+                            View
+                        </a>
+                        <a href="{{ url_for('edit_item', item_id=item.id) }}" class="btn btn-secondary btn-sm">
+                            Edit
+                        </a>
+                        <form method="POST" action="{{ url_for('resolve_item', item_id=item.id) }}" style="display: inline;">
+                            <button type="submit" class="btn btn-found btn-sm">
+                                {% if item.is_resolved() %}Reopen{% else %}✓ Resolve{% endif %}
+                            </button>
+                        </form>
+                        <form method="POST" action="{{ url_for('delete_item', item_id=item.id) }}" onsubmit="return confirm('Permanently delete this report?');" style="display: inline;">
+                            <button type="submit" class="btn btn-lost btn-sm">
+                                Delete
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <!-- Empty State -->
+        <div style="text-align: center; padding: 4.5rem 1.5rem; background: var(--bg-card); border: 1px dashed var(--border-hairline); border-radius: var(--radius-xl);">
+            <div style="font-size: 3rem; margin-bottom: 0.75rem;">📋</div>
+            <h3 style="font-size: 1.35rem; font-weight: 800; margin-bottom: 0.5rem; color: #ffffff;">No reports yet</h3>
+            <p style="color: var(--text-muted); max-width: 480px; margin: 0 auto 1.5rem;">
+                You haven't posted any lost or found items under this status. Report an item now to connect with campus finders!
+            </p>
+            <a href="{{ url_for('post_item') }}" class="btn btn-primary btn-sm">+ Post An Item ↗</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
